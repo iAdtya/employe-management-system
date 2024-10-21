@@ -2,7 +2,7 @@ import express from "express";
 import { db } from "./db.js";
 import { departments, employees } from "./schema.js";
 import cors from "cors";
-import { sql, like, eq } from 'drizzle-orm';
+import { like, eq } from 'drizzle-orm';
 
 
 const app = express();
@@ -13,7 +13,6 @@ app.use(express.json());
 // Enable CORS
 app.use(cors());
 
-// Step 3: Define a simple route
 app.get("/", (req, res) => {
   res.json({ message: "Hello, world!" });
 });
@@ -35,7 +34,6 @@ app.post("/AddDepartments", async (req, res) => {
   console.log("Received payload:", { name, description });
 
   try {
-    // Insert the department into the database
     await db.insert(departments).values({
       name,
       description,
@@ -68,6 +66,7 @@ app.get("/FetchEmployees", async (req, res) => {
     console.log("SQL query:", query.toSQL());
     const employeeList = await query;
     res.status(200).json({ employees: employeeList });
+    
   } catch (error) {
     console.error("Error fetching employees:", error);
     res.status(500).json({ 
